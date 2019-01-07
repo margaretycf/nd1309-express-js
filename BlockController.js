@@ -24,6 +24,7 @@ class BlockController {
     getBlockByIndex() {
         this.app.get("/api/block/:index", (req, res) => {
             // Add your code here
+            res.send(JSON.stringify(this.blocks[req.params["index"]])).toString();
         });
     }
 
@@ -33,6 +34,12 @@ class BlockController {
     postNewBlock() {
         this.app.post("/api/block", (req, res) => {
             // Add your code here
+            let newBlock = new BlockClass.Block(req.body.data);
+            newBlock.height = this.blocks.length;
+            newBlock.hash = SHA256(JSON.stringify(newBlock)).toString();
+            this.blocks.push(newBlock);
+            res.write('the posted block:\n');
+            res.send(JSON.stringify(newBlock).toString());
         });
     }
 
